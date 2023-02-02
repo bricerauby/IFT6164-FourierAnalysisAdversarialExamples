@@ -33,7 +33,7 @@ def pgd_attack(model, images, labels, eps=0.3, alpha=2/255, iters=40, device=Non
             
     return images
 
-def computePGDMap(net, testloader, pdg_params={"eps":0.03, "alpha":2/255, "iters":7}, device=None):
+def computePGDMap(net, testloader, pdg_params={"eps":8/255, "alpha":2/255, "iters":7}, device=None):
     """
     Compute the average fourier spectrum for PGD perturbations over a dataset given a model as described for fig.7 in [1]
 
@@ -61,9 +61,9 @@ def computePGDMap(net, testloader, pdg_params={"eps":0.03, "alpha":2/255, "iters
         outputs = net(inputs)
         _, predicted = torch.max(outputs.data, 1)
         if perturbation_adv is None:
-            perturbation_adv = ((predicted_perturbated != predicted).float().view(-1,1,1,1) * torch.abs(torch.fft.fftshift(torch.fft.fft2(inputs_perturbated - inputs), dim=(-2,-1)))).sum(dim=(0,1))
+            perturbation_adv = ((predicted_perturbated != labels).float().view(-1,1,1,1) * torch.abs(torch.fft.fftshift(torch.fft.fft2(inputs_perturbated - inputs), dim=(-2,-1)))).sum(dim=(0,1))
         else : 
-            perturbation_adv += ((predicted_perturbated != predicted).float().view(-1,1,1,1) * torch.abs(torch.fft.fftshift(torch.fft.fft2(inputs_perturbated - inputs), dim=(-2,-1)))).sum(dim=(0,1))
+            perturbation_adv += ((predicted_perturbated != labels).float().view(-1,1,1,1) * torch.abs(torch.fft.fftshift(torch.fft.fft2(inputs_perturbated - inputs), dim=(-2,-1)))).sum(dim=(0,1))
         # the class with the highest energy is what we choose as prediction
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)

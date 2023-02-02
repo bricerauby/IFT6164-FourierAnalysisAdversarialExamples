@@ -1,0 +1,6 @@
+*.npy
+*.pth
+old/*
+data/*
+checkpoint/*
+*pyc

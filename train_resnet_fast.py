@@ -121,10 +121,12 @@ def fit_one_cycle(epochs, max_lr, model, train_loader, val_loader,
 
 train_transform = transforms.Compose([transforms.RandomCrop(32, padding=4, padding_mode='reflect'), 
                          transforms.RandomHorizontalFlip(),
-                        transforms.ToTensor()])
+                        transforms.ToTensor(),
+     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 test_transform = transforms.Compose(
-    [transforms.ToTensor()])
+    [transforms.ToTensor(),
+     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
 
 trainset = torchvision.datasets.CIFAR10(root='./data', train=True,
